@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0a">
+<title>GYMBRO</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#f0f0f0;min-height:100vh;min-height:100dvh}
+:root{--g:#00e676;--bg:#0a0a0a;--s:#141414;--s2:#1e1e1e;--b:#2a2a2a;--m:#888;--d:#ff4444}
+#root{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+.aw{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:2rem;background:#0a0a0a}
+.ac{background:#141414;border:1px solid #2a2a2a;border-radius:16px;padding:2.5rem;width:100%;max-width:400px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;letter-spacing:5px;color:var(--g);text-align:center}
+.sub{text-align:center;color:var(--m);font-size:.8rem;margin-bottom:2rem;letter-spacing:2px;text-transform:uppercase}
+label{display:block;font-size:.75rem;color:var(--m);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:1px}
+input,select,textarea{width:100%;background:#1e1e1e;border:1px solid #2a2a2a;border-radius:8px;padding:.75rem 1rem;color:#f0f0f0;font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;transition:border-color .2s;margin-bottom:1rem;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--g)}
+select option{background:#1e1e1e}
+.btn{width:100%;background:var(--g);color:#000;border:none;border-radius:8px;padding:.85rem;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.85}.btn:disabled{opacity:.4;cursor:not-allowed}
+.bto{background:transparent!important;color:var(--g)!important;border:1px solid var(--g)!important;font-family:'DM Sans',sans-serif!important;font-size:.85rem!important;letter-spacing:.5px!important}
+.bsm{padding:.4rem .9rem!important;font-size:.8rem!important;width:auto!important;border-radius:6px!important}
+.bdg{background:var(--d)!important;color:#fff!important;border-color:var(--d)!important}
+.lnk{background:none;border:none;color:var(--g);cursor:pointer;font-size:.9rem;text-decoration:underline;padding:0}
+.err{background:#ff444422;border:1px solid #ff4444;border-radius:8px;padding:.75rem;font-size:.85rem;color:#ff6666;margin-bottom:1rem}
+.ok{background:#00e67622;border:1px solid var(--g);border-radius:8px;padding:.75rem;font-size:.85rem;color:var(--g);margin-bottom:1rem}
+.ml{display:flex;flex-direction:column;height:100vh;height:100dvh}
+.tb{background:#141414;border-bottom:1px solid #2a2a2a;padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;flex-shrink:0}
+.tl{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--g)}
+.av{width:32px;height:32px;border-radius:50%;background:var(--g);color:#000;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.85rem;flex-shrink:0}
+.content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.bn{background:#141414;border-top:1px solid #2a2a2a;display:flex;justify-content:space-around;padding:.65rem 0 calc(.65rem + env(safe-area-inset-bottom));position:sticky;bottom:0;z-index:100;flex-shrink:0}
+.ni{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--m);font-size:.65rem;letter-spacing:.5px;text-transform:uppercase;transition:color .2s;padding:.2rem .5rem;border:none;background:none;-webkit-tap-highlight-color:transparent}
+.ni.active{color:var(--g)}
+.pg{padding:1.25rem;max-width:600px;margin:0 auto;width:100%;padding-bottom:2rem}
+.card{background:#141414;border:1px solid #2a2a2a;border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.ct{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--g);margin-bottom:1rem}
+.dc{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:10px;margin-bottom:.75rem;overflow:hidden}
+.dh{padding:.85rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;-webkit-tap-highlight-color:transparent}
+.dh:hover{background:#252525}
+.dn{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px}
+.dm{font-size:.78rem;color:var(--m)}
+.db{padding:0 1.1rem .9rem}
+.ex{background:#0a0a0a;border:1px solid #2a2a2a;border-radius:8px;padding:.85rem;margin-bottom:.5rem}
+.en{font-weight:500;font-size:.92rem;margin-bottom:.28rem}
+.ed{font-size:.76rem;color:var(--m)}
+.ea{display:flex;gap:.5rem;margin-top:.5rem}
+.tag{display:inline-block;background:#1e1e1e;border:1px solid #2a2a2a;border-radius:4px;padding:2px 7px;font-size:.73rem;color:var(--m);margin-right:.25rem}
+.dp{background:#0d1f15;border:1px solid #00e67640;border-radius:10px;padding:1rem;margin-top:.75rem}
+.dp iframe{width:100%;height:200px;border-radius:8px;border:none;margin-top:.75rem;background:#000}
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
+.mi{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:7px;padding:.5rem .75rem;cursor:pointer;font-size:.8rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.mi.sel{background:#00e67612;border-color:#00e67640;color:var(--g)}
+.mc{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:2px;color:var(--m);margin:.65rem 0 .35rem}
+.sr{display:flex;align-items:center;gap:.75rem;padding:.45rem 0;border-bottom:1px solid #1e1e1e}
+.sc{width:26px;height:26px;border-radius:50%;border:2px solid #2a2a2a;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;font-size:.8rem;-webkit-tap-highlight-color:transparent}
+.sc.done{background:var(--g);border-color:var(--g);color:#000}
+.bg{background:#00e67620;color:var(--g);border:1px solid #00e67640;border-radius:4px;padding:2px 8px;font-size:.75rem;font-weight:600}
+.pb{height:4px;background:#2a2a2a;border-radius:2px;overflow:hidden;margin-top:.4rem}
+.pf{height:100%;background:var(--g);border-radius:2px;transition:width .3s}
+.lt{display:flex;gap:.35rem}
+.lb{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:5px;padding:.3rem .65rem;cursor:pointer;font-size:.76rem;color:var(--m);transition:all .2s}
+.lb.active{background:#00e67615;border-color:#00e67640;color:var(--g)}
+.cv{transition:transform .3s;display:inline-block}
+.cv.open{transform:rotate(180deg)}
+.sp{display:inline-block;width:18px;height:18px;border:2px solid #2a2a2a;border-top-color:var(--g);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lc{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;gap:.75rem;color:var(--m)}
+.row{display:flex;gap:.75rem}
+.row>div{flex:1}
+.pc{background:#ff440010;border:1px solid #ff444430;border-radius:10px;padding:.9rem;margin-bottom:.75rem}
+hr{border:none;border-top:1px solid #2a2a2a;margin:.9rem 0}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const{useState,useEffect}=React;
+const SB_URL='https://hipctdxrnsawhanuuojt.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpcGN0ZHhybnNhd2hhbnV1b2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3NTAxMTUsImV4cCI6MjA4OTMyNjExNX0.y24cOLGfVZiiSlIXD_s7nIqXcowF6aWsZco4mRo45wM';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+
+const MES={
+  'Cardio':['Cinta de correr','Bici estática','Elíptica','Remo Concept2','Escaladora','Bici de aire Torque'],
+  'Peso libre':['Mancuernas','Barra olímpica','Barra EZ','Kettlebells','Banco plano','Banco inclinado','Banco declinado'],
+  'Máquinas guiadas':['Press banca máquina','Press hombro máquina','Jalón polea alta','Polea baja','Remo máquina','Leg press','Hack squat','Prensa piernas','Curl femoral tumbado','Extensión cuádriceps','Abductor','Aductor','Hip thrust máquina'],
+  'Funcional':['Rack / Jaula','Multipower / Smith','Cables cruzados / Functional Trainer','Poleas múltiple 4 estaciones','TRX','Dominadas / Fondos','Banco romano / Hyperextension','Trineo / Sled Matrix','Trineo Torque','Battle ropes']
+};
+const MEN={
+  'Cardio':['Treadmill','Stationary bike','Elliptical','Concept2 Rower','Stair climber','Torque air bike'],
+  'Free weights':['Dumbbells','Olympic bar','EZ bar','Kettlebells','Flat bench','Incline bench','Decline bench'],
+  'Guided machines':['Machine chest press','Machine shoulder press','Lat pulldown','Low pulley','Machine row','Leg press','Hack squat','Leg press sled','Lying leg curl','Quad extension','Abductor','Adductor','Hip thrust machine'],
+  'Functional':['Rack / Cage','Smith machine','Dual cable / Functional Trainer','Multi-pulley 4-station','TRX','Pull-up / Dip station','Back extension bench','Matrix sled','Torque sled','Battle ropes']
+};
+
+const T={
+  es:{login:'Iniciar sesión',register:'Crear cuenta',email:'Email',password:'Contraseña',name:'Nombre',age:'Edad',weight:'Peso (kg)',height:'Altura (cm)',sex:'Sexo',male:'Hombre',female:'Mujer',goal:'Objetivo',goals:['Ganar masa muscular','Perder grasa','Fuerza','Resistencia','Tonificar'],level:'Nivel',levels:['Principiante','Intermedio','Avanzado'],days:'Días/semana',injuries:'Lesiones / limitaciones',gym:'Mi gym',gymName:'Nombre del gym',selectMachines:'Selecciona las máquinas de tu gym',saveProfile:'Guardar perfil',saveGym:'Guardar gym',routine:'Rutina',session:'Sesión',history:'Historial',profile:'Perfil',admin:'Admin',generateRoutine:'Generar rutina con IA',generating:'Generando...',noRoutine:'Sin rutina. Rellena perfil y gym primero.',demo:'Demo',close:'Cerrar',notes:'Notas',addNotes:'Peso, sensaciones...',done:'Guardar sesión',sets:'series',reps:'reps',rest:'desc',yourRoutine:'Tu rutina semanal',loadingDemo:'Cargando explicación...',demoTitle:'Cómo hacer',sessionSaved:'Sesión guardada ✓',saving:'Guardando...',noHistory:'Sin historial aún',logout:'Salir',pendingDevices:'Dispositivos pendientes',approve:'Aprobar',reject:'Rechazar',newDevice:'Nuevo dispositivo',completeFirst:'Completa perfil y gym primero'},
+  en:{login:'Log in',register:'Sign up',email:'Email',password:'Password',name:'Full name',age:'Age',weight:'Weight (kg)',height:'Height (cm)',sex:'Sex',male:'Male',female:'Female',goal:'Goal',goals:['Build muscle','Lose fat','Strength','Endurance','Tone up'],level:'Level',levels:['Beginner','Intermediate','Advanced'],days:'Days/week',injuries:'Injuries / limitations',gym:'My gym',gymName:'Gym name',selectMachines:'Select your gym machines',saveProfile:'Save profile',saveGym:'Save gym',routine:'Routine',session:'Session',history:'History',profile:'Profile',admin:'Admin',generateRoutine:'Generate AI routine',generating:'Generating...',noRoutine:'No routine. Fill profile and gym first.',demo:'Demo',close:'Close',notes:'Notes',addNotes:'Weight, feelings...',done:'Save session',sets:'sets',reps:'reps',rest:'rest',yourRoutine:'Your weekly routine',loadingDemo:'Loading explanation...',demoTitle:'How to do',sessionSaved:'Session saved ✓',saving:'Saving...',noHistory:'No history yet',logout:'Log out',pendingDevices:'Pending devices',approve:'Approve',reject:'Reject',newDevice:'New device',completeFirst:'Complete profile and gym first'}
+};
+
+async function ai(prompt,sys){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key':'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',
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys||'You are a professional personal trainer.',messages:[{role:'user',content:prompt}]})
+  });
+  const d=await r.json();return d.content?.[0]?.text||'';
+}
+
+function Auth({onAuth,lang,setLang}){
+  const[mode,setMode]=useState('login');
+  const[email,setEmail]=useState('');const[pass,setPass]=useState('');const[name,setName]=useState('');
+  const[loading,setLoading]=useState(false);const[err,setErr]=useState('');
+  const t=T[lang];
+  async function go(){
+    setErr('');setLoading(true);
+    try{
+      if(mode==='login'){const{data,error:e}=await sb.auth.signInWithPassword({email,password:pass});if(e)throw e;onAuth(data.user);}
+      else{const{data,error:e}=await sb.auth.signUp({email,password:pass,options:{data:{name}}});if(e)throw e;if(data.user)onAuth(data.user);}
+    }catch(e){setErr(e.message);}
+    setLoading(false);
+  }
+  return(
+    <div className="aw">
+      <div className="ac">
+        <div style={{display:'flex',justifyContent:'flex-end',marginBottom:'1rem'}}>
+          <div className="lt">{['es','en'].map(l=><button key={l} className={`lb${lang===l?' active':''}`} onClick={()=>setLang(l)}>{l.toUpperCase()}</button>)}</div>
+        </div>
+        <div className="logo">GYMBRO</div>
+        <div className="sub">Your AI Training Partner</div>
+        {err&&<div className="err">{err}</div>}
+        {mode==='register'&&<div><label>{t.name}</label><input value={name} onChange={e=>setName(e.target.value)}/></div>}
+        <div><label>{t.email}</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} autoComplete="email"/></div>
+        <div><label>{t.password}</label><input type="password" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==='Enter'&&go()} autoComplete="current-password"/></div>
+        <button className="btn" onClick={go} disabled={loading}>{loading?<span className="sp"/>:(mode==='login'?t.login:t.register)}</button>
+        <div style={{textAlign:'center',marginTop:'1rem',fontSize:'.85rem',color:'var(--m)'}}>
+          {mode==='login'?'¿Sin cuenta? ':'¿Ya tienes cuenta? '}
+          <button className="lnk" onClick={()=>setMode(mode==='login'?'register':'login')}>{mode==='login'?t.register:t.login}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Profile({user,profile,onSave,lang,t}){
+  const[f,setF]=useState({name:profile?.name||user.user_metadata?.name||'',age:profile?.age||'',weight:profile?.weight||'',height:profile?.height||'',sex:profile?.sex||'male',goal:profile?.goal||t.goals[0],level:profile?.level||t.levels[0],days:profile?.days||3,injuries:profile?.injuries||''});
+  const[loading,setLoading]=useState(false);const[saved,setSaved]=useState(false);
+  const s=k=>v=>setF(f=>({...f,[k]:v}));
+  async function save(){
+    setLoading(true);
+    const h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'};
+    await fetch(SB_URL+'/rest/v1/gymbro_profiles',{method:'POST',headers:h,body:JSON.stringify({user_id:user.id,...f,lang,updated_at:new Date().toISOString()})});
+    setSaved(true);setTimeout(()=>setSaved(false),2000);onSave(f);setLoading(false);
+  }
+  return(
+    <div className="pg">
+      <div className="card">
+        <div className="ct">{t.profile}</div>
+        <div className="row"><div><label>{t.name}</label><input value={f.name} onChange={e=>s('name')(e.target.value)}/></div><div><label>{t.age}</label><input type="number" value={f.age} onChange={e=>s('age')(e.target.value)}/></div></div>
+        <div className="row"><div><label>{t.weight}</label><input type="number" value={f.weight} onChange={e=>s('weight')(e.target.value)}/></div><div><label>{t.height}</label><input type="number" value={f.height} onChange={e=>s('height')(e.target.value)}/></div></div>
+        <div className="row">
+          <div><label>{t.sex}</label><select value={f.sex} onChange={e=>s('sex')(e.target.value)}><option value="male">{t.male}</option><option value="female">{t.female}</option></select></div>
+          <div><label>{t.days}</label><select value={f.days} onChange={e=>s('days')(parseInt(e.target.value))}>{[2,3,4,5,6].map(d=><option key={d} value={d}>{d}</option>)}</select></div>
+        </div>
+        <div><label>{t.goal}</label><select value={f.goal} onChange={e=>s('goal')(e.target.value)}>{t.goals.map(g=><option key={g}>{g}</option>)}</select></div>
+        <div><label>{t.level}</label><select value={f.level} onChange={e=>s('level')(e.target.value)}>{t.levels.map(l=><option key={l}>{l}</option>)}</select></div>
+        <div><label>{t.injuries}</label><textarea style={{resize:'vertical',minHeight:'70px'}} value={f.injuries} onChange={e=>s('injuries')(e.target.value)} placeholder="Opcional..."/></div>
+        {saved&&<div className="ok">✓ Guardado</div>}
+        <button className="btn" onClick={save} disabled={loading}>{loading?<span className="sp"/>:t.saveProfile}</button>
+      </div>
+    </div>
+  );
+}
+
+function Gym({user,gymData,onSave,lang,t}){
+  const ME=lang==='en'?MEN:MES;
+  const[gymName,setGymName]=useState(gymData?.name||'');
+  const[sel,setSel]=useState(gymData?.machines||[]);
+  const[loading,setLoading]=useState(false);const[saved,setSaved]=useState(false);
+  const tog=m=>setSel(s=>s.includes(m)?s.filter(x=>x!==m):[...s,m]);
+  async function save(){
+    setLoading(true);
+    const h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'};
+    await fetch(SB_URL+'/rest/v1/gymbro_gyms',{method:'POST',headers:h,body:JSON.stringify({user_id:user.id,name:gymName,machines:sel,updated_at:new Date().toISOString()})});
+    setSaved(true);setTimeout(()=>setSaved(false),2000);onSave({name:gymName,machines:sel});setLoading(false);
+  }
+  return(
+    <div className="pg">
+      <div className="card">
+        <div className="ct">{t.gym}</div>
+        <div><label>{t.gymName}</label><input value={gymName} onChange={e=>setGymName(e.target.value)} placeholder="Anytime Fitness Badalona Centro"/></div>
+        <hr/>
+        <div style={{fontSize:'.8rem',color:'var(--m)',marginBottom:'.5rem'}}>{t.selectMachines}</div>
+        {Object.entries(ME).map(([cat,items])=>(
+          <div key={cat}>
+            <div className="mc">{cat}</div>
+            <div className="mg">{items.map(m=><div key={m} className={`mi${sel.includes(m)?' sel':''}`} onClick={()=>tog(m)}><span style={{width:'13px',fontSize:'.8rem'}}>{sel.includes(m)?'✓':''}</span>{m}</div>)}</div>
+          </div>
+        ))}
+        {saved&&<div className="ok" style={{marginTop:'1rem'}}>✓ Guardado</div>}
+        <button className="btn" style={{marginTop:'1rem'}} onClick={save} disabled={loading}>{loading?<span className="sp"/>:t.saveGym}</button>
+      </div>
+    </div>
+  );
+}
+
+function Routine({user,profile,gymData,routine,setRoutine,lang,t}){
+  const[gen,setGen]=useState(false);const[exp,setExp]=useState(null);const[demo,setDemo]=useState(null);const[demoL,setDemoL]=useState(false);const[demoT,setDemoT]=useState('');
+  async function generate(){
+    if(!profile||!gymData)return;
+    setGen(true);
+    const mach=(gymData.machines||[]).join(', ')||'basic equipment';
+    const p=lang==='es'
+      ?`Crea rutina semanal ${profile.days} días para: ${profile.age} años, ${profile.sex==='male'?'hombre':'mujer'}, ${profile.weight}kg, ${profile.height}cm. Objetivo: ${profile.goal}. Nivel: ${profile.level}. Lesiones: ${profile.injuries||'ninguna'}. Equipamiento disponible: ${mach}.\nResponde SOLO con JSON válido sin markdown ni texto extra:\n{"days":[{"day":"Lunes","muscles":"Pecho + Tríceps","exercises":[{"name":"Press banca","sets":4,"reps":"8-10","rest":"90s","notes":"Agarre medio"}]}]}`
+      :`Create ${profile.days}-day weekly routine: ${profile.age}y ${profile.sex}, ${profile.weight}kg, ${profile.height}cm. Goal: ${profile.goal}. Level: ${profile.level}. Injuries: ${profile.injuries||'none'}. Equipment: ${mach}.\nRespond ONLY with valid JSON no markdown:\n{"days":[{"day":"Monday","muscles":"Chest + Triceps","exercises":[{"name":"Bench press","sets":4,"reps":"8-10","rest":"90s","notes":"Medium grip"}]}]}`;
+    try{
+      const txt=await ai(p);
+      const clean=txt.replace(/```json|```/g,'').trim();
+      const data=JSON.parse(clean);
+      const h2={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'};await fetch(SB_URL+'/rest/v1/gymbro_routines',{method:'POST',headers:h2,body:JSON.stringify({user_id:user.id,routine:data,created_at:new Date().toISOString()})});
+      setRoutine(data);
+      localStorage.setItem('gr_'+user.id,JSON.stringify(data));
+    }catch(e){console.error(e);}
+    setGen(false);
+  }
+  async function showDemo(name){
+    setDemo(name);setDemoL(true);setDemoT('');
+    const p=lang==='es'
+      ?`Explica "${name}" para principiantes: 1) Posición inicial 2) Ejecución paso a paso 3) 2 errores comunes 4) 2 consejos clave. Máx 180 palabras.`
+      :`Explain "${name}" for beginners: 1) Starting position 2) Step-by-step execution 3) 2 common mistakes 4) 2 key tips. Max 180 words.`;
+    const txt=await ai(p,lang==='es'?'Eres entrenador personal experto. Explica de forma clara y concisa.':'You are an expert personal trainer. Be clear and concise.');
+    setDemoT(txt);setDemoL(false);
+  }
+  const days=routine?.days||[];
+  return(
+    <div className="pg">
+      {!routine?(
+        <div className="card" style={{textAlign:'center',padding:'2.5rem'}}>
+          <div style={{fontSize:'3rem',marginBottom:'1rem'}}>💪</div>
+          <div style={{color:'var(--m)',marginBottom:'1.25rem',fontSize:'.9rem',lineHeight:'1.5'}}>{t.noRoutine}</div>
+          {(!profile||!gymData)&&<div className="err" style={{fontSize:'.82rem',textAlign:'left'}}>{t.completeFirst}</div>}
+          <button className="btn" onClick={generate} disabled={gen||!profile||!gymData}>
+            {gen?<><span className="sp"/> {t.generating}</>:t.generateRoutine}
+          </button>
+        </div>
+      ):(
+        <>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
+            <div style={{fontFamily:'Bebas Neue',fontSize:'1.4rem',letterSpacing:'3px',color:'var(--g)'}}>{t.yourRoutine}</div>
+            <button className="btn bto bsm" onClick={generate} disabled={gen}>{gen?<span className="sp"/>:'↻ IA'}</button>
+          </div>
+          {days.map((day,i)=>(
+            <div key={i} className="dc">
+              <div className="dh" onClick={()=>setExp(exp===i?null:i)}>
+                <div><div className="dn">{day.day}</div><div className="dm">{day.muscles}</div></div>
+                <span className={`cv${exp===i?' open':''}`}>▾</span>
+              </div>
+              {exp===i&&(
+                <div className="db">
+                  {(day.exercises||[]).map((ex,j)=>(
+                    <div key={j} className="ex">
+                      <div className="en">{ex.name}</div>
+                      <div className="ed">
+                        <span className="tag">{ex.sets} {t.sets}</span>
+                        <span className="tag">{ex.reps} {t.reps}</span>
+                        <span className="tag">{ex.rest}</span>
+                      </div>
+                      {ex.notes&&<div style={{fontSize:'.74rem',color:'var(--m)',marginTop:'.2rem'}}>{ex.notes}</div>}
+                      <div className="ea">
+                        <button className="btn bto bsm" onClick={()=>demo===ex.name?setDemo(null):showDemo(ex.name)}>
+                          {demo===ex.name?t.close:t.demo}
+                        </button>
+                      </div>
+                      {demo===ex.name&&(
+                        <div className="dp">
+                          <div style={{fontFamily:'Bebas Neue',letterSpacing:'2px',color:'var(--g)',marginBottom:'.5rem'}}>{t.demoTitle}: {ex.name}</div>
+                          {demoL
+                            ?<div className="lc"><span className="sp"/><span style={{fontSize:'.82rem'}}>{t.loadingDemo}</span></div>
+                            :<p style={{fontSize:'.83rem',lineHeight:'1.65',color:'#ccc',whiteSpace:'pre-wrap'}}>{demoT}</p>
+                          }
+                          <iframe src={`https://www.youtube.com/embed?search=${encodeURIComponent(ex.name+' proper form tutorial')}&listType=search`} allowFullScreen title={ex.name}/>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+  );
+}
+
+function Session({user,routine,lang,t}){
+  const todayIdx=(new Date().getDay()+6)%7;
+  const days=routine?.days||[];
+  const tod=days[Math.min(todayIdx,days.length-1)]||days[0];
+  const[chk,setChk]=useState({});const[notes,setNotes]=useState({});const[an,setAn]=useState(null);
+  const[saving,setSaving]=useState(false);const[saved,setSaved]=useState(false);
+  const togS=(ei,si)=>{const k=`${ei}-${si}`;setChk(c=>({...c,[k]:!c[k]}));};
+  async function saveS(){
+    setSaving(true);
+    const hs={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};await fetch(SB_URL+'/rest/v1/gymbro_sessions',{method:'POST',headers:hs,body:JSON.stringify({user_id:user.id,day:tod?.day,date:new Date().toISOString(),checked:chk,notes})});
+    setSaved(true);setSaving(false);setTimeout(()=>setSaved(false),2500);
+  }
+  if(!routine)return<div className="pg"><div className="card" style={{textAlign:'center',padding:'2rem',color:'var(--m)'}}>{t.noRoutine}</div></div>;
+  const exs=tod?.exercises||[];
+  const total=exs.reduce((a,e)=>a+(e.sets||0),0);
+  const done=Object.values(chk).filter(Boolean).length;
+  return(
+    <div className="pg">
+      <div className="card">
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
+          <div><div className="ct" style={{marginBottom:'.2rem'}}>{tod?.day}</div><div style={{fontSize:'.82rem',color:'var(--m)'}}>{tod?.muscles}</div></div>
+          <span className="bg">{done}/{total}</span>
+        </div>
+        <div className="pb"><div className="pf" style={{width:`${total?done/total*100:0}%`}}/></div>
+      </div>
+      {exs.map((ex,i)=>(
+        <div key={i} className="card">
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.6rem'}}>
+            <div><div style={{fontWeight:500,fontSize:'.92rem'}}>{ex.name}</div><div style={{fontSize:'.75rem',color:'var(--m)'}}>{ex.sets}×{ex.reps} · {ex.rest}</div></div>
+            <button className="btn bto bsm" onClick={()=>setAn(an===i?null:i)}>📝</button>
+          </div>
+          {Array.from({length:ex.sets||0}).map((_,s)=>{
+            const k=`${i}-${s}`;
+            return(
+              <div key={s} className="sr">
+                <div className={`sc${chk[k]?' done':''}`} onClick={()=>togS(i,s)}>{chk[k]&&'✓'}</div>
+                <span style={{fontSize:'.82rem',color:'var(--m)'}}>Set {s+1} · {ex.reps}</span>
+              </div>
+            );
+          })}
+          {an===i&&(
+            <textarea style={{width:'100%',background:'#1e1e1e',border:'1px solid #2a2a2a',borderRadius:'8px',padding:'.6rem',color:'#f0f0f0',fontFamily:'DM Sans',fontSize:'.82rem',minHeight:'65px',resize:'vertical',marginTop:'.6rem',outline:'none'}}
+              placeholder={t.addNotes} value={notes[i]||''} onChange={e=>setNotes(n=>({...n,[i]:e.target.value}))}/>
+          )}
+        </div>
+      ))}
+      {saved&&<div className="ok">{t.sessionSaved}</div>}
+      <button className="btn" onClick={saveS} disabled={saving}>{saving?<><span className="sp"/> {t.saving}</>:t.done}</button>
+    </div>
+  );
+}
+
+function History({user,lang,t}){
+  const[sess,setSess]=useState([]);const[loading,setLoading]=useState(true);
+  useEffect(()=>{
+    sb.from('gymbro_sessions').select('*').eq('user_id',user.id).order('date',{ascending:false}).limit(30)
+      .then(({data})=>{setSess(data||[]);setLoading(false);});
+  },[user.id]);
+  if(loading)return<div className="lc"><span className="sp"/></div>;
+  return(
+    <div className="pg">
+      {sess.length===0
+        ?<div className="card" style={{textAlign:'center',padding:'2rem',color:'var(--m)'}}>{t.noHistory}</div>
+        :sess.map((s,i)=>(
+          <div key={i} className="card">
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              <div style={{fontFamily:'Bebas Neue',fontSize:'1.05rem',letterSpacing:'2px'}}>{s.day}</div>
+              <span style={{fontSize:'.76rem',color:'var(--m)'}}>{new Date(s.date).toLocaleDateString(lang==='es'?'es-ES':'en-GB')}</span>
+            </div>
+            <div style={{fontSize:'.76rem',color:'var(--m)',marginTop:'.2rem'}}>{Object.values(s.checked||{}).filter(Boolean).length} sets completados</div>
+            {Object.values(s.notes||{}).some(n=>n)&&(
+              <div style={{fontSize:'.75rem',color:'#555',marginTop:'.3rem',fontStyle:'italic'}}>{Object.values(s.notes).filter(Boolean).slice(0,2).join(' · ')}</div>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  );
+}
+
+function Admin({user,t}){
+  const[pend,setPend]=useState([]);const[loading,setLoading]=useState(true);
+  useEffect(()=>{
+    sb.from('gymbro_device_requests').select('*').eq('status','pending')
+      .then(({data})=>{setPend(data||[]);setLoading(false);});
+  },[]);
+  async function dec(id,st){await sb.from('gymbro_device_requests').update({status:st}).eq('id',id);setPend(p=>p.filter(x=>x.id!==id));}
+  if(loading)return<div className="lc"><span className="sp"/></div>;
+  return(
+    <div className="pg">
+      <div style={{fontFamily:'Bebas Neue',fontSize:'1.4rem',letterSpacing:'3px',color:'var(--g)',marginBottom:'1rem'}}>{t.pendingDevices}</div>
+      {pend.length===0
+        ?<div className="card" style={{textAlign:'center',padding:'2rem',color:'var(--m)'}}>— 0 pending —</div>
+        :pend.map((r,i)=>(
+          <div key={i} className="pc">
+            <div style={{fontWeight:500,marginBottom:'.2rem'}}>{r.email}</div>
+            <div style={{fontSize:'.76rem',color:'var(--m)',marginBottom:'.7rem'}}>{t.newDevice}: {r.device_id?.slice(0,20)}...</div>
+            <div style={{display:'flex',gap:'.5rem'}}>
+              <button className="btn bsm" style={{background:'var(--g)',color:'#000',border:'none'}} onClick={()=>dec(r.id,'approved')}>{t.approve}</button>
+              <button className="btn bsm bdg" onClick={()=>dec(r.id,'rejected')}>{t.reject}</button>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  );
+}
+
+function App(){
+  const[lang,setLang]=useState(localStorage.getItem('gl')||'es');
+  const[user,setUser]=useState(null);const[profile,setProfile]=useState(null);const[gymData,setGymData]=useState(null);const[routine,setRoutine]=useState(null);const[tab,setTab]=useState('routine');const[loading,setLoading]=useState(true);
+  const t=T[lang];
+  const ADMIN=user?.email==='metra76@gmail.com';
+  useEffect(()=>{localStorage.setItem('gl',lang);},[lang]);
+  useEffect(()=>{
+    sb.auth.getSession().then(({data:{session}})=>{if(session?.user)load(session.user);else setLoading(false);});
+    const{data:{subscription}}=sb.auth.onAuthStateChange((_,s)=>{if(s?.user)load(s.user);});
+    return()=>subscription.unsubscribe();
+  },[]);
+  async function load(u){
+    setUser(u);
+    const h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Accept':'application/json'};
+    try{
+      const[pr,gr,rr]=await Promise.all([
+        fetch(SB_URL+'/rest/v1/gymbro_profiles?select=*&user_id=eq.'+u.id+'&limit=1',{headers:h}).then(r=>r.json()),
+        fetch(SB_URL+'/rest/v1/gymbro_gyms?select=*&user_id=eq.'+u.id+'&limit=1',{headers:h}).then(r=>r.json()),
+        fetch(SB_URL+'/rest/v1/gymbro_routines?select=*&user_id=eq.'+u.id+'&order=created_at.desc&limit=1',{headers:h}).then(r=>r.json()),
+      ]);
+      if(Array.isArray(pr)&&pr[0]){setProfile(pr[0]);setLang(pr[0].lang||lang);}
+      if(Array.isArray(gr)&&gr[0])setGymData(gr[0]);
+      if(Array.isArray(rr)&&rr[0])setRoutine(rr[0].routine);
+      else{const c=localStorage.getItem('gr_'+u.id);if(c)setRoutine(JSON.parse(c));}
+    }catch(e){console.error('load error',e);}
+    setLoading(false);
+  }
+  async function logout(){await sb.auth.signOut();setUser(null);setProfile(null);setGymData(null);setRoutine(null);}
+  if(loading)return(
+    <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#0a0a0a',flexDirection:'column',gap:'1rem'}}>
+      <div style={{fontFamily:'Bebas Neue',fontSize:'3.5rem',letterSpacing:'5px',color:'#00e676'}}>GYMBRO</div>
+      <span className="sp"/>
+    </div>
+  );
+  if(!user)return<Auth onAuth={load} lang={lang} setLang={setLang}/>;
+  const init=(profile?.name||user.email||'U').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const nav=[
+    {id:'routine',icon:'📋',label:t.routine},
+    {id:'session',icon:'🏋️',label:t.session},
+    {id:'history',icon:'📊',label:t.history},
+    {id:'gym',icon:'🏟️',label:t.gym},
+    {id:'profile',icon:'👤',label:t.profile},
+    ...(ADMIN?[{id:'admin',icon:'🔑',label:t.admin}]:[])
+  ];
+  return(
+    <div className="ml">
+      <div className="tb">
+        <div className="tl">GYMBRO</div>
+        <div style={{display:'flex',alignItems:'center',gap:'.65rem'}}>
+          <div className="lt">{['es','en'].map(l=><button key={l} className={`lb${lang===l?' active':''}`} onClick={()=>setLang(l)}>{l.toUpperCase()}</button>)}</div>
+          <div className="av">{init}</div>
+          <button style={{background:'none',border:'none',color:'var(--m)',cursor:'pointer',fontSize:'.78rem'}} onClick={logout}>{t.logout}</button>
+        </div>
+      </div>
+      <div className="content">
+        {tab==='routine'&&<Routine user={user} profile={profile} gymData={gymData} routine={routine} setRoutine={setRoutine} lang={lang} t={t}/>}
+        {tab==='session'&&<Session user={user} routine={routine} lang={lang} t={t}/>}
+        {tab==='history'&&<History user={user} lang={lang} t={t}/>}
+        {tab==='gym'&&<Gym user={user} gymData={gymData} onSave={setGymData} lang={lang} t={t}/>}
+        {tab==='profile'&&<Profile user={user} profile={profile} onSave={setProfile} lang={lang} t={t}/>}
+        {tab==='admin'&&ADMIN&&<Admin user={user} t={t}/>}
+      </div>
+      <nav className="bn">
+        {nav.map(item=>(
+          <button key={item.id} className={`ni${tab===item.id?' active':''}`} onClick={()=>setTab(item.id)}>
+            <span style={{fontSize:'1.2rem'}}>{item.icon}</span>
+            <span>{item.label}</span>
+          </button>
+        ))}
+      </nav>
+    </div>
+  );
+}
+ReactDOM.render(<App/>,document.getElementById('root'));
+</script>
+</body>
+</html>
