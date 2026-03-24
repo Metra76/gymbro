@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>GYMBRO</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body,#root{min-height:100vh}
+body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#f0f0f0}
+:root{--g:#00e676;--s:#141414;--s2:#1e1e1e;--b:#2a2a2a;--m:#888;--d:#ff4444}
+.aw{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.ac{background:var(--s);border:1px solid var(--b);border-radius:16px;padding:2rem;width:100%;max-width:380px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;letter-spacing:5px;color:var(--g);text-align:center}
+.sub{text-align:center;color:var(--m);font-size:.78rem;margin-bottom:1.75rem;letter-spacing:2px;text-transform:uppercase}
+label{display:block;font-size:.73rem;color:var(--m);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:1px}
+input,select,textarea{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:.7rem .9rem;color:#f0f0f0;font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s;margin-bottom:.85rem}
+input:focus,select:focus,textarea:focus{border-color:var(--g)}
+select option{background:var(--s2)}
+.btn{width:100%;background:var(--g);color:#000;border:none;border-radius:8px;padding:.82rem;font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:2px;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.85}.btn:disabled{opacity:.35;cursor:not-allowed}
+.bto{background:transparent!important;color:var(--g)!important;border:1px solid var(--g)!important;font-family:'DM Sans',sans-serif!important;font-size:.82rem!important}
+.bsm{padding:.38rem .85rem!important;font-size:.78rem!important;width:auto!important;border-radius:6px!important}
+.bdg{background:var(--d)!important;color:#fff!important;border-color:var(--d)!important}
+.lnk{background:none;border:none;color:var(--g);cursor:pointer;font-size:.88rem;text-decoration:underline;padding:0}
+.err{background:#ff444420;border:1px solid #ff444460;border-radius:8px;padding:.7rem;font-size:.82rem;color:#ff6666;margin-bottom:.85rem}
+.ok{background:#00e67620;border:1px solid #00e67660;border-radius:8px;padding:.7rem;font-size:.82rem;color:var(--g);margin-bottom:.85rem}
+.ml{display:flex;flex-direction:column;min-height:100vh}
+.tb{background:var(--s);border-bottom:1px solid var(--b);padding:.7rem 1.2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.tl{font-family:'Bebas Neue',sans-serif;font-size:1.75rem;letter-spacing:3px;color:var(--g)}
+.av{width:30px;height:30px;border-radius:50%;background:var(--g);color:#000;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.82rem}
+.content{flex:1;overflow-y:auto}
+.bn{background:var(--s);border-top:1px solid var(--b);display:flex;justify-content:space-around;padding:.6rem 0;position:sticky;bottom:0;z-index:100}
+.ni{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--m);font-size:.62rem;letter-spacing:.5px;text-transform:uppercase;transition:color .2s;padding:.2rem .45rem;border:none;background:none}
+.ni.active{color:var(--g)}
+.pg{padding:1.2rem;max-width:580px;margin:0 auto;width:100%;padding-bottom:2rem}
+.card{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:1.15rem;margin-bottom:.9rem}
+.ct{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:2px;color:var(--g);margin-bottom:.9rem}
+.dc{background:var(--s2);border:1px solid var(--b);border-radius:10px;margin-bottom:.65rem;overflow:hidden}
+.dh{padding:.8rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.dh:hover{background:#252525}
+.dn{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:2px}
+.dm{font-size:.76rem;color:var(--m)}
+.db{padding:0 1.1rem .85rem}
+.ex{background:#0a0a0a;border:1px solid var(--b);border-radius:8px;padding:.82rem;margin-bottom:.45rem}
+.en{font-weight:500;font-size:.9rem;margin-bottom:.25rem}
+.tag{display:inline-block;background:var(--s2);border:1px solid var(--b);border-radius:4px;padding:2px 6px;font-size:.72rem;color:var(--m);margin-right:.2rem}
+.dp{background:#0d1f15;border:1px solid #00e67640;border-radius:10px;padding:.9rem;margin-top:.65rem}
+.dp iframe{width:100%;height:195px;border-radius:8px;border:none;margin-top:.65rem;background:#000}
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:.35rem}
+.mi{background:var(--s2);border:1px solid var(--b);border-radius:7px;padding:.45rem .7rem;cursor:pointer;font-size:.78rem;display:flex;align-items:center;gap:.35rem;transition:all .2s}
+.mi.sel{background:#00e67612;border-color:#00e67640;color:var(--g)}
+.mc{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:2px;color:var(--m);margin:.6rem 0 .3rem}
+.sr{display:flex;align-items:center;gap:.7rem;padding:.42rem 0;border-bottom:1px solid var(--s2)}
+.sc{width:25px;height:25px;border-radius:50%;border:2px solid var(--b);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;font-size:.78rem}
+.sc.done{background:var(--g);border-color:var(--g);color:#000}
+.bg{background:#00e67620;color:var(--g);border:1px solid #00e67640;border-radius:4px;padding:2px 7px;font-size:.73rem;font-weight:600}
+.pb{height:4px;background:var(--b);border-radius:2px;overflow:hidden;margin-top:.35rem}
+.pf{height:100%;background:var(--g);border-radius:2px;transition:width .3s}
+.lt{display:flex;gap:.35rem}
+.lb{background:var(--s2);border:1px solid var(--b);border-radius:5px;padding:.28rem .6rem;cursor:pointer;font-size:.74rem;color:var(--m);transition:all .2s}
+.lb.active{background:#00e67615;border-color:#00e67640;color:var(--g)}
+.cv{transition:transform .3s;display:inline-block}
+.cv.open{transform:rotate(180deg)}
+.sp{display:inline-block;width:17px;height:17px;border:2px solid var(--b);border-top-color:var(--g);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lc{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;gap:.75rem;color:var(--m)}
+.row{display:flex;gap:.65rem}
+.row>div{flex:1}
+hr{border:none;border-top:1px solid var(--b);margin:.85rem 0}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const{useState,useEffect,useRef}=React;
+
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+const SB='https://hipctdxrnsawhanuuojt.supabase.co';
+const ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpcGN0ZHhybnNhd2hhbnV1b2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3NTAxMTUsImV4cCI6MjA4OTMyNjExNX0.y24cOLGfVZiiSlIXD_s7nIqXcowF6aWsZco4mRo45wM';
+const ADMIN_EMAIL='metra76@gmail.com';
+
+// ─── SUPABASE HELPERS ─────────────────────────────────────────────────────────
+// All DB calls use the user's JWT so RLS works correctly
+function dbHeaders(token){
+  return{
+    'apikey':ANON,
+    'Authorization':'Bearer '+(token||ANON),
+    'Content-Type':'application/json',
+    'Accept':'application/json'
+  };
+}
+async function dbGet(token,table,filter){
+  const r=await fetch(`${SB}/rest/v1/${table}?select=*&${filter}&limit=1`,{headers:dbHeaders(token)});
+  const d=await r.json();
+  return Array.isArray(d)?d[0]:null;
+}
+async function dbUpsert(token,table,body){
+  return fetch(`${SB}/rest/v1/${table}`,{
+    method:'POST',
+    headers:{...dbHeaders(token),'Prefer':'resolution=merge-duplicates,return=minimal'},
+    body:JSON.stringify(body)
+  });
+}
+async function dbInsert(token,table,body){
+  return fetch(`${SB}/rest/v1/${table}`,{
+    method:'POST',
+    headers:{...dbHeaders(token),'Prefer':'return=minimal'},
+    body:JSON.stringify(body)
+  });
+}
+async function dbGetMany(token,table,filter){
+  const r=await fetch(`${SB}/rest/v1/${table}?select=*&${filter}`,{headers:dbHeaders(token)});
+  const d=await r.json();
+  return Array.isArray(d)?d:[];
+}
+
+// ─── AUTH HELPERS ─────────────────────────────────────────────────────────────
+async function authSignIn(email,password){
+  const r=await fetch(`${SB}/auth/v1/token?grant_type=password`,{
+    method:'POST',
+    headers:{'apikey':ANON,'Content-Type':'application/json'},
+    body:JSON.stringify({email,password})
+  });
+  return r.json();
+}
+async function authSignUp(email,password,name){
+  const r=await fetch(`${SB}/auth/v1/signup`,{
+    method:'POST',
+    headers:{'apikey':ANON,'Content-Type':'application/json'},
+    body:JSON.stringify({email,password,data:{name}})
+  });
+  return r.json();
+}
+async function authRefresh(refresh_token){
+  const r=await fetch(`${SB}/auth/v1/token?grant_type=refresh_token`,{
+    method:'POST',
+    headers:{'apikey':ANON,'Content-Type':'application/json'},
+    body:JSON.stringify({refresh_token})
+  });
+  return r.json();
+}
+async function authSignOut(token){
+  await fetch(`${SB}/auth/v1/logout`,{
+    method:'POST',
+    headers:{'apikey':ANON,'Authorization':'Bearer '+token}
+  });
+}
+
+// ─── AI ────────────────────────────────────────────────────────────────────────
+async function ai(prompt,sys){
+  const r=await fetch('https://hipctdxrnsawhanuuojt.supabase.co/functions/v1/quick-worker',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-haiku-4-5-20251001',
+      max_tokens:1500,
+      system:sys||'You are a professional personal trainer.',
+      messages:[{role:'user',content:prompt}]
+    })
+  });
+  const d=await r.json();
+  if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));
+  return d.content?.[0]?.text||'';
+}
+
+// ─── TRANSLATIONS ──────────────────────────────────────────────────────────────
+const T={
+  es:{login:'Iniciar sesión',register:'Crear cuenta',email:'Email',password:'Contraseña',name:'Nombre',age:'Edad',weight:'Peso (kg)',height:'Altura (cm)',sex:'Sexo',male:'Hombre',female:'Mujer',goal:'Objetivo',goals:['Ganar masa muscular','Perder grasa','Fuerza','Resistencia','Tonificar'],level:'Nivel',levels:['Principiante','Intermedio','Avanzado'],days:'Días/semana',injuries:'Lesiones / limitaciones',gym:'Mi gym',gymName:'Nombre del gym',selectMachines:'Selecciona las máquinas de tu gym',saveProfile:'Guardar perfil',saveGym:'Guardar gym',routine:'Rutina',session:'Sesión',history:'Historial',profile:'Perfil',admin:'Admin',generateRoutine:'Generar rutina con IA',generating:'Generando rutina...',noRoutine:'Sin rutina. Rellena perfil y gym y genera una.',demo:'Demo',close:'Cerrar',notes:'Notas',addNotes:'Peso, sensaciones...',done:'Guardar sesión',sets:'series',reps:'reps',rest:'desc',yourRoutine:'Tu rutina semanal',loadingDemo:'Cargando...',demoTitle:'Cómo hacer',sessionSaved:'Sesión guardada ✓',saving:'Guardando...',noHistory:'Sin historial aún',logout:'Salir',pendingDevices:'Dispositivos pendientes',approve:'Aprobar',reject:'Rechazar',newDevice:'Nuevo dispositivo',completeFirst:'Completa tu perfil y gym primero',savedOk:'✓ Guardado'},
+  en:{login:'Log in',register:'Sign up',email:'Email',password:'Password',name:'Full name',age:'Age',weight:'Weight (kg)',height:'Height (cm)',sex:'Sex',male:'Male',female:'Female',goal:'Goal',goals:['Build muscle','Lose fat','Strength','Endurance','Tone up'],level:'Level',levels:['Beginner','Intermediate','Advanced'],days:'Days/week',injuries:'Injuries / limitations',gym:'My gym',gymName:'Gym name',selectMachines:'Select your gym machines',saveProfile:'Save profile',saveGym:'Save gym',routine:'Routine',session:'Session',history:'History',profile:'Profile',admin:'Admin',generateRoutine:'Generate AI routine',generating:'Generating routine...',noRoutine:'No routine. Fill profile and gym first.',demo:'Demo',close:'Close',notes:'Notes',addNotes:'Weight, feelings...',done:'Save session',sets:'sets',reps:'reps',rest:'rest',yourRoutine:'Your weekly routine',loadingDemo:'Loading...',demoTitle:'How to do',sessionSaved:'Session saved ✓',saving:'Saving...',noHistory:'No history yet',logout:'Log out',pendingDevices:'Pending devices',approve:'Approve',reject:'Reject',newDevice:'New device',completeFirst:'Complete your profile and gym first',savedOk:'✓ Saved'}
+};
+
+const MES={'Cardio':['Cinta de correr','Bici estática','Elíptica','Remo Concept2','Escaladora','Bici de aire Torque'],'Peso libre':['Mancuernas','Barra olímpica','Barra EZ','Kettlebells','Banco plano','Banco inclinado','Banco declinado'],'Máquinas guiadas':['Press banca máquina','Press hombro máquina','Jalón polea alta','Polea baja','Remo máquina','Leg press','Hack squat','Prensa piernas','Curl femoral tumbado','Extensión cuádriceps','Abductor','Aductor','Hip thrust máquina'],'Funcional':['Rack / Jaula','Multipower / Smith','Cables cruzados / Functional Trainer','Poleas múltiple 4 estaciones','TRX','Dominadas / Fondos','Banco romano / Hyperextension','Trineo / Sled Matrix','Trineo Torque','Battle ropes']};
+const MEN={'Cardio':['Treadmill','Stationary bike','Elliptical','Concept2 Rower','Stair climber','Torque air bike'],'Free weights':['Dumbbells','Olympic bar','EZ bar','Kettlebells','Flat bench','Incline bench','Decline bench'],'Guided machines':['Machine chest press','Machine shoulder press','Lat pulldown','Low pulley','Machine row','Leg press','Hack squat','Leg press sled','Lying leg curl','Quad extension','Abductor','Adductor','Hip thrust machine'],'Functional':['Rack / Cage','Smith machine','Dual cable / Functional Trainer','Multi-pulley 4-station','TRX','Pull-up / Dip station','Back extension bench','Matrix sled','Torque sled','Battle ropes']};
+
+// ─── AUTH SCREEN ───────────────────────────────────────────────────────────────
+function AuthScreen({onAuth,lang,setLang}){
+  const[mode,setMode]=useState('login');
+  const[email,setEmail]=useState('');const[pass,setPass]=useState('');const[name,setName]=useState('');
+  const[loading,setLoading]=useState(false);const[err,setErr]=useState('');
+  const t=T[lang];
+  async function go(){
+    setErr('');setLoading(true);
+    try{
+      let d;
+      if(mode==='login'){
+        d=await authSignIn(email,pass);
+        if(d.error)throw new Error(d.error.message||d.msg||JSON.stringify(d.error));
+      }else{
+        d=await authSignUp(email,pass,name);
+        if(d.error)throw new Error(d.error.message||d.msg||JSON.stringify(d.error));
+      }
+      console.log('auth response',JSON.stringify(d).slice(0,200));
+      const usr=d.user||d.data?.user;
+      const tok=d.access_token||d.data?.access_token;
+      if(!usr)throw new Error('No user in response: '+JSON.stringify(d).slice(0,200));
+      localStorage.setItem('gb_sess',JSON.stringify({
+        access_token:tok,
+        refresh_token:d.refresh_token||d.data?.refresh_token,
+        user:usr
+      }));
+      onAuth(usr,tok);
+    }catch(e){setErr(e.message);}
+    setLoading(false);
+  }
+  return(
+    <div className="aw">
+      <div className="ac">
+        <div style={{display:'flex',justifyContent:'flex-end',marginBottom:'1rem'}}>
+          <div className="lt">{['es','en'].map(l=><button key={l} className={`lb${lang===l?' active':''}`} onClick={()=>setLang(l)}>{l.toUpperCase()}</button>)}</div>
+        </div>
+        <div className="logo">GYMBRO</div>
+        <div className="sub">Your AI Training Partner</div>
+        {err&&<div className="err">{err}</div>}
+        {mode==='register'&&<div><label>{t.name}</label><input value={name} onChange={e=>setName(e.target.value)}/></div>}
+        <div><label>{t.email}</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)}/></div>
+        <div><label>{t.password}</label><input type="password" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==='Enter'&&go()}/></div>
+        <button className="btn" onClick={go} disabled={loading}>{loading?<span className="sp"/>:(mode==='login'?t.login:t.register)}</button>
+        <div style={{textAlign:'center',marginTop:'1rem',fontSize:'.83rem',color:'var(--m)'}}>
+          {mode==='login'?'¿Sin cuenta? ':'¿Ya tienes cuenta? '}
+          <button className="lnk" onClick={()=>setMode(mode==='login'?'register':'login')}>{mode==='login'?t.register:t.login}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── PROFILE ───────────────────────────────────────────────────────────────────
+function ProfilePage({user,token,profile,onSave,lang,t}){
+  const[f,setF]=useState({name:profile?.name||user.user_metadata?.name||'',age:profile?.age||'',weight:profile?.weight||'',height:profile?.height||'',sex:profile?.sex||'male',goal:profile?.goal||t.goals[0],level:profile?.level||t.levels[0],days:profile?.days||3,injuries:profile?.injuries||''});
+  const[loading,setLoading]=useState(false);const[saved,setSaved]=useState(false);const[err,setErr]=useState('');
+  const s=k=>v=>setF(f=>({...f,[k]:v}));
+  async function save(){
+    setLoading(true);setErr('');
+    try{
+      const r=await dbUpsert(token,'gymbro_profiles',{user_id:user.id,...f,lang,updated_at:new Date().toISOString()});
+      if(!r.ok){const e=await r.text();throw new Error(e);}
+      setSaved(true);setTimeout(()=>setSaved(false),2000);onSave(f);
+    }catch(e){setErr(e.message);}
+    setLoading(false);
+  }
+  return(
+    <div className="pg">
+      <div className="card">
+        <div className="ct">{t.profile}</div>
+        <div className="row"><div><label>{t.name}</label><input value={f.name} onChange={e=>s('name')(e.target.value)}/></div><div><label>{t.age}</label><input type="number" value={f.age} onChange={e=>s('age')(e.target.value)}/></div></div>
+        <div className="row"><div><label>{t.weight}</label><input type="number" value={f.weight} onChange={e=>s('weight')(e.target.value)}/></div><div><label>{t.height}</label><input type="number" value={f.height} onChange={e=>s('height')(e.target.value)}/></div></div>
+        <div className="row">
+          <div><label>{t.sex}</label><select value={f.sex} onChange={e=>s('sex')(e.target.value)}><option value="male">{t.male}</option><option value="female">{t.female}</option></select></div>
+          <div><label>{t.days}</label><select value={f.days} onChange={e=>s('days')(parseInt(e.target.value))}>{[2,3,4,5,6].map(d=><option key={d} value={d}>{d}</option>)}</select></div>
+        </div>
+        <div><label>{t.goal}</label><select value={f.goal} onChange={e=>s('goal')(e.target.value)}>{t.goals.map(g=><option key={g}>{g}</option>)}</select></div>
+        <div><label>{t.level}</label><select value={f.level} onChange={e=>s('level')(e.target.value)}>{t.levels.map(l=><option key={l}>{l}</option>)}</select></div>
+        <div><label>{t.injuries}</label><textarea style={{resize:'vertical',minHeight:'65px'}} value={f.injuries} onChange={e=>s('injuries')(e.target.value)} placeholder="Opcional..."/></div>
+        {err&&<div className="err">{err}</div>}
+        {saved&&<div className="ok">{t.savedOk}</div>}
+        <button className="btn" onClick={save} disabled={loading}>{loading?<span className="sp"/>:t.saveProfile}</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── GYM ───────────────────────────────────────────────────────────────────────
+function GymPage({user,token,gymData,onSave,lang,t}){
+  const ME=lang==='en'?MEN:MES;
+  const[gymName,setGymName]=useState(gymData?.name||'');
+  const[sel,setSel]=useState(gymData?.machines||[]);
+  const[loading,setLoading]=useState(false);const[saved,setSaved]=useState(false);const[err,setErr]=useState('');
+  const tog=m=>setSel(s=>s.includes(m)?s.filter(x=>x!==m):[...s,m]);
+  async function save(){
+    setLoading(true);setErr('');
+    try{
+      const r=await dbUpsert(token,'gymbro_gyms',{user_id:user.id,name:gymName,machines:sel,updated_at:new Date().toISOString()});
+      if(!r.ok){const e=await r.text();throw new Error(e);}
+      setSaved(true);setTimeout(()=>setSaved(false),2000);onSave({name:gymName,machines:sel});
+    }catch(e){setErr(e.message);}
+    setLoading(false);
+  }
+  return(
+    <div className="pg">
+      <div className="card">
+        <div className="ct">{t.gym}</div>
+        <div><label>{t.gymName}</label><input value={gymName} onChange={e=>setGymName(e.target.value)} placeholder="Anytime Fitness Badalona Centro"/></div>
+        <hr/>
+        <div style={{fontSize:'.78rem',color:'var(--m)',marginBottom:'.5rem'}}>{t.selectMachines}</div>
+        {Object.entries(ME).map(([cat,items])=>(
+          <div key={cat}>
+            <div className="mc">{cat}</div>
+            <div className="mg">{items.map(m=><div key={m} className={`mi${sel.includes(m)?' sel':''}`} onClick={()=>tog(m)}><span style={{width:'12px',fontSize:'.8rem'}}>{sel.includes(m)?'✓':''}</span>{m}</div>)}</div>
+          </div>
+        ))}
+        {err&&<div className="err" style={{marginTop:'.85rem'}}>{err}</div>}
+        {saved&&<div className="ok" style={{marginTop:'.85rem'}}>{t.savedOk}</div>}
+        <button className="btn" style={{marginTop:'.85rem'}} onClick={save} disabled={loading}>{loading?<span className="sp"/>:t.saveGym}</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── ROUTINE ───────────────────────────────────────────────────────────────────
+function RoutinePage({user,token,profile,gymData,routine,setRoutine,lang,t}){
+  const[gen,setGen]=useState(false);const[exp,setExp]=useState(null);const[demo,setDemo]=useState(null);const[demoL,setDemoL]=useState(false);const[demoT,setDemoT]=useState('');const[genErr,setGenErr]=useState('');
+
+  async function generate(){
+    if(!profile||!gymData){setGenErr(t.completeFirst);return;}
+    setGen(true);setGenErr('');
+    const mach=(gymData.machines||[]).join(', ')||'basic equipment';
+    const p=lang==='es'
+      ?`Crea una rutina semanal de ${profile.days} días para: ${profile.age} años, ${profile.sex==='male'?'hombre':'mujer'}, ${profile.weight}kg, ${profile.height}cm. Objetivo: ${profile.goal}. Nivel: ${profile.level}. Lesiones/limitaciones: ${profile.injuries||'ninguna'}. Equipamiento disponible: ${mach}.\n\nResponde ÚNICAMENTE con JSON válido, sin texto adicional ni markdown:\n{"days":[{"day":"Lunes","muscles":"Pecho + Tríceps","exercises":[{"name":"Press banca","sets":4,"reps":"8-10","rest":"90s","notes":"Agarre medio"}]}]}`
+      :`Create a ${profile.days}-day weekly routine for: ${profile.age}y ${profile.sex}, ${profile.weight}kg, ${profile.height}cm. Goal: ${profile.goal}. Level: ${profile.level}. Injuries: ${profile.injuries||'none'}. Equipment: ${mach}.\n\nRespond ONLY with valid JSON, no extra text or markdown:\n{"days":[{"day":"Monday","muscles":"Chest + Triceps","exercises":[{"name":"Bench press","sets":4,"reps":"8-10","rest":"90s","notes":"Medium grip"}]}]}`;
+    try{
+      const txt=await ai(p,'You are a professional personal trainer. Respond only with valid JSON, no markdown, no explanation.');
+      const clean=txt.replace(/```json|```/g,'').trim();
+      const data=JSON.parse(clean);
+      await dbUpsert(token,'gymbro_routines',{user_id:user.id,routine:data,created_at:new Date().toISOString()});
+      setRoutine(data);
+      localStorage.setItem('gr_'+user.id,JSON.stringify(data));
+    }catch(e){setGenErr('Error: '+e.message);console.error(e);}
+    setGen(false);
+  }
+
+  async function showDemo(name){
+    setDemo(name);setDemoL(true);setDemoT('');
+    try{
+      const p=lang==='es'
+        ?`Explica "${name}" para principiantes en 3 partes breves: 1) Posición inicial 2) Ejecución 3) Errores comunes. Máx 150 palabras.`
+        :`Explain "${name}" for beginners in 3 short parts: 1) Starting position 2) Execution 3) Common mistakes. Max 150 words.`;
+      const txt=await ai(p,lang==='es'?'Eres entrenador personal. Sé claro y conciso.':'You are a personal trainer. Be clear and concise.');
+      setDemoT(txt);
+    }catch(e){setDemoT('Error cargando demo');}
+    setDemoL(false);
+  }
+
+  const days=routine?.days||[];
+  return(
+    <div className="pg">
+      {!routine?(
+        <div className="card" style={{textAlign:'center',padding:'2.5rem'}}>
+          <div style={{fontSize:'2.5rem',marginBottom:'.85rem'}}>💪</div>
+          <div style={{color:'var(--m)',marginBottom:'1.25rem',fontSize:'.88rem',lineHeight:'1.5'}}>{t.noRoutine}</div>
+          {genErr&&<div className="err">{genErr}</div>}
+          <button className="btn" onClick={generate} disabled={gen}>
+            {gen?<><span className="sp"/> {t.generating}</>:t.generateRoutine}
+          </button>
+        </div>
+      ):(
+        <>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
+            <div style={{fontFamily:'Bebas Neue',fontSize:'1.35rem',letterSpacing:'3px',color:'var(--g)'}}>{t.yourRoutine}</div>
+            <button className="btn bto bsm" onClick={generate} disabled={gen}>{gen?<span className="sp"/>:'↻ IA'}</button>
+          </div>
+          {genErr&&<div className="err">{genErr}</div>}
+          {days.map((day,i)=>(
+            <div key={i} className="dc">
+              <div className="dh" onClick={()=>setExp(exp===i?null:i)}>
+                <div><div className="dn">{day.day}</div><div className="dm">{day.muscles}</div></div>
+                <span className={`cv${exp===i?' open':''}`}>▾</span>
+              </div>
+              {exp===i&&(
+                <div className="db">
+                  {(day.exercises||[]).map((ex,j)=>(
+                    <div key={j} className="ex">
+                      <div className="en">{ex.name}</div>
+                      <div style={{fontSize:'.75rem',color:'var(--m)'}}>
+                        <span className="tag">{ex.sets} {t.sets}</span>
+                        <span className="tag">{ex.reps} {t.reps}</span>
+                        <span className="tag">{ex.rest}</span>
+                      </div>
+                      {ex.notes&&<div style={{fontSize:'.73rem',color:'var(--m)',marginTop:'.2rem'}}>{ex.notes}</div>}
+                      <div style={{marginTop:'.45rem'}}>
+                        <button className="btn bto bsm" onClick={()=>demo===ex.name?setDemo(null):showDemo(ex.name)}>{demo===ex.name?t.close:t.demo}</button>
+                      </div>
+                      {demo===ex.name&&(
+                        <div className="dp">
+                          <div style={{fontFamily:'Bebas Neue',letterSpacing:'2px',color:'var(--g)',marginBottom:'.4rem'}}>{t.demoTitle}: {ex.name}</div>
+                          {demoL?<div className="lc"><span className="sp"/></div>:<p style={{fontSize:'.82rem',lineHeight:'1.65',color:'#ccc',whiteSpace:'pre-wrap'}}>{demoT}</p>}
+                          <iframe src={`https://www.youtube.com/embed?search=${encodeURIComponent(ex.name+' ejercicio correctamente')}&listType=search`} allowFullScreen title={ex.name}/>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+  );
+}
+
+// ─── SESSION ───────────────────────────────────────────────────────────────────
+function SessionPage({user,token,routine,lang,t}){
+  const todayIdx=(new Date().getDay()+6)%7;
+  const days=routine?.days||[];
+  const tod=days[Math.min(todayIdx,days.length-1)]||days[0];
+  const[chk,setChk]=useState({});const[notes,setNotes]=useState({});const[an,setAn]=useState(null);
+  const[saving,setSaving]=useState(false);const[saved,setSaved]=useState(false);
+
+  const togS=(ei,si)=>{const k=`${ei}-${si}`;setChk(c=>({...c,[k]:!c[k]}));};
+
+  async function saveS(){
+    setSaving(true);
+    await dbInsert(token,'gymbro_sessions',{user_id:user.id,day:tod?.day,date:new Date().toISOString(),checked:chk,notes});
+    setSaved(true);setSaving(false);setTimeout(()=>setSaved(false),2500);
+  }
+
+  if(!routine)return<div className="pg"><div className="card" style={{textAlign:'center',padding:'2rem',color:'var(--m)'}}>{t.noRoutine}</div></div>;
+
+  const exs=tod?.exercises||[];
+  const total=exs.reduce((a,e)=>a+(e.sets||0),0);
+  const done=Object.values(chk).filter(Boolean).length;
+
+  return(
+    <div className="pg">
+      <div className="card">
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
+          <div><div className="ct" style={{marginBottom:'.2rem'}}>{tod?.day}</div><div style={{fontSize:'.8rem',color:'var(--m)'}}>{tod?.muscles}</div></div>
+          <span className="bg">{done}/{total}</span>
+        </div>
+        <div className="pb"><div className="pf" style={{width:`${total?done/total*100:0}%`}}/></div>
+      </div>
+      {exs.map((ex,i)=>(
+        <div key={i} className="card">
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.55rem'}}>
+            <div><div style={{fontWeight:500,fontSize:'.9rem'}}>{ex.name}</div><div style={{fontSize:'.74rem',color:'var(--m)'}}>{ex.sets}×{ex.reps} · {ex.rest}</div></div>
+            <button className="btn bto bsm" onClick={()=>setAn(an===i?null:i)}>📝</button>
+          </div>
+          {Array.from({length:ex.sets||0}).map((_,s)=>{
+            const k=`${i}-${s}`;
+            return(
+              <div key={s} className="sr">
+                <div className={`sc${chk[k]?' done':''}`} onClick={()=>togS(i,s)}>{chk[k]&&'✓'}</div>
+                <span style={{fontSize:'.8rem',color:'var(--m)'}}>Set {s+1} · {ex.reps}</span>
+              </div>
+            );
+          })}
+          {an===i&&(
+            <textarea style={{width:'100%',background:'#1e1e1e',border:'1px solid #2a2a2a',borderRadius:'8px',padding:'.55rem',color:'#f0f0f0',fontFamily:'DM Sans',fontSize:'.8rem',minHeight:'60px',resize:'vertical',marginTop:'.55rem',outline:'none'}}
+              placeholder={t.addNotes} value={notes[i]||''} onChange={e=>setNotes(n=>({...n,[i]:e.target.value}))}/>
+          )}
+        </div>
+      ))}
+      {saved&&<div className="ok">{t.sessionSaved}</div>}
+      <button className="btn" onClick={saveS} disabled={saving}>{saving?<><span className="sp"/> {t.saving}</>:t.done}</button>
+    </div>
+  );
+}
+
+// ─── HISTORY ───────────────────────────────────────────────────────────────────
+function HistoryPage({user,token,lang,t}){
+  const[sess,setSess]=useState([]);const[loading,setLoading]=useState(true);
+  useEffect(()=>{
+    dbGetMany(token,'gymbro_sessions',`user_id=eq.${user.id}&order=date.desc&limit=30`)
+      .then(d=>{setSess(d);setLoading(false);});
+  },[]);
+  if(loading)return<div className="lc"><span className="sp"/></div>;
+  return(
+    <div className="pg">
+      {sess.length===0
+        ?<div className="card" style={{textAlign:'center',padding:'2rem',color:'var(--m)'}}>{t.noHistory}</div>
+        :sess.map((s,i)=>(
+          <div key={i} className="card">
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              <div style={{fontFamily:'Bebas Neue',fontSize:'1.05rem',letterSpacing:'2px'}}>{s.day}</div>
+              <span style={{fontSize:'.75rem',color:'var(--m)'}}>{new Date(s.date).toLocaleDateString(lang==='es'?'es-ES':'en-GB')}</span>
+            </div>
+            <div style={{fontSize:'.75rem',color:'var(--m)',marginTop:'.2rem'}}>{Object.values(s.checked||{}).filter(Boolean).length} sets completados</div>
+          </div>
+        ))
+      }
+    </div>
+  );
+}
+
+// ─── APP ───────────────────────────────────────────────────────────────────────
+function App(){
+  const[lang,setLang]=useState(localStorage.getItem('gl')||'es');
+  const[user,setUser]=useState(null);
+  const[token,setToken]=useState(null);
+  const[profile,setProfile]=useState(null);
+  const[gymData,setGymData]=useState(null);
+  const[routine,setRoutine]=useState(null);
+  const[tab,setTab]=useState('routine');
+  const[loading,setLoading]=useState(true);
+  const t=T[lang];
+  const IS_ADMIN=user?.email===ADMIN_EMAIL;
+
+  useEffect(()=>{localStorage.setItem('gl',lang);},[lang]);
+
+  useEffect(()=>{
+    // Try to restore session from localStorage
+    const saved=localStorage.getItem('gb_sess');
+    if(saved){
+      try{
+        const s=JSON.parse(saved);
+        if(s.access_token&&s.user&&s.user.id){
+          loadData(s.user,s.access_token);
+          return;
+        }
+      }catch(e){console.error('session restore error',e);}
+    }
+    setLoading(false);
+  },[]);
+
+  async function loadData(u,tok){
+    setUser(u);setToken(tok);
+    try{
+      const[pr,gr,rr]=await Promise.all([
+        dbGet(tok,'gymbro_profiles',`user_id=eq.${u.id}`),
+        dbGet(tok,'gymbro_gyms',`user_id=eq.${u.id}`),
+        dbGet(tok,'gymbro_routines',`user_id=eq.${u.id}&order=created_at.desc`)
+      ]);
+      if(pr){setProfile(pr);if(pr.lang)setLang(pr.lang);}
+      if(gr)setGymData(gr);
+      if(rr)setRoutine(rr.routine);
+      else{const c=localStorage.getItem('gr_'+u.id);if(c)setRoutine(JSON.parse(c));}
+    }catch(e){console.error('loadData error',e);}
+    setLoading(false);
+  }
+
+  function handleAuth(u,tok){
+    loadData(u,tok);
+  }
+
+  async function logout(){
+    if(token)await authSignOut(token);
+    localStorage.removeItem('gb_sess');
+    setUser(null);setToken(null);setProfile(null);setGymData(null);setRoutine(null);
+  }
+
+  if(loading)return(
+    <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#0a0a0a',flexDirection:'column',gap:'1rem'}}>
+      <div style={{fontFamily:'Bebas Neue',fontSize:'3.5rem',letterSpacing:'5px',color:'#00e676'}}>GYMBRO</div>
+      <span className="sp"/>
+    </div>
+  );
+
+  if(!user)return<AuthScreen onAuth={handleAuth} lang={lang} setLang={setLang}/>;
+
+  const init=(profile?.name||user.email||'U').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const nav=[
+    {id:'routine',icon:'📋',label:t.routine},
+    {id:'session',icon:'🏋️',label:t.session},
+    {id:'history',icon:'📊',label:t.history},
+    {id:'gym',icon:'🏟️',label:t.gym},
+    {id:'profile',icon:'👤',label:t.profile},
+  ];
+
+  return(
+    <div className="ml">
+      <div className="tb">
+        <div className="tl">GYMBRO</div>
+        <div style={{display:'flex',alignItems:'center',gap:'.6rem'}}>
+          <div className="lt">{['es','en'].map(l=><button key={l} className={`lb${lang===l?' active':''}`} onClick={()=>setLang(l)}>{l.toUpperCase()}</button>)}</div>
+          <div className="av">{init}</div>
+          <button style={{background:'none',border:'none',color:'var(--m)',cursor:'pointer',fontSize:'.75rem'}} onClick={logout}>{t.logout}</button>
+        </div>
+      </div>
+      <div className="content">
+        {tab==='routine'&&<RoutinePage user={user} token={token} profile={profile} gymData={gymData} routine={routine} setRoutine={setRoutine} lang={lang} t={t}/>}
+        {tab==='session'&&<SessionPage user={user} token={token} routine={routine} lang={lang} t={t}/>}
+        {tab==='history'&&<HistoryPage user={user} token={token} lang={lang} t={t}/>}
+        {tab==='gym'&&<GymPage user={user} token={token} gymData={gymData} onSave={setGymData} lang={lang} t={t}/>}
+        {tab==='profile'&&<ProfilePage user={user} token={token} profile={profile} onSave={setProfile} lang={lang} t={t}/>}
+      </div>
+      <nav className="bn">
+        {nav.map(item=>(
+          <button key={item.id} className={`ni${tab===item.id?' active':''}`} onClick={()=>setTab(item.id)}>
+            <span style={{fontSize:'1.15rem'}}>{item.icon}</span>
+            <span>{item.label}</span>
+          </button>
+        ))}
+      </nav>
+    </div>
+  );
+}
+
+ReactDOM.render(<App/>,document.getElementById('root'));
+</script>
+</body>
+</html>
